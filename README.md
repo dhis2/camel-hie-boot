@@ -1,4 +1,4 @@
-## Camel HIE BOOT
+## Camel HIE Boot
 
 Camel tailored for HIE.
 
