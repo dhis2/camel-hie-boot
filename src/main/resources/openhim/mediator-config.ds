@@ -1,0 +1,36 @@
+local stringToBoolean(str) = if ds.lower(str) == "true" then true
+                             else if ds.lower(str) == "false" then false
+                                  else error "Invalid boolean string";
+
+{
+  "urn": cml.exchangeProperty('mediatorUrn'),
+  "version": cml.exchangeProperty('mediatorVersion'),
+  "name": cml.exchangeProperty('mediatorName'),
+  "defaultChannelConfig": [
+    {
+      "name": cml.exchangeProperty('defaultChannelName'),
+      "methods": ds.map(std.split(cml.exchangeProperty('defaultChannelMethods'), ","), function(v) ds.trim(v)),
+      "urlPattern": cml.exchangeProperty('defaultChannelUrlPattern'),
+      "authType": cml.exchangeProperty('defaultChannelAuthType'),
+      "routes": {
+        "name": cml.exchangeProperty('defaultChannelRouteName'),
+        "host": cml.exchangeProperty('defaultChannelRouteHost'),
+        "port": cml.exchangeProperty('defaultChannelRoutePort'),
+        "path": cml.exchangeProperty('defaultChannelRoutePath'),
+        "primary": stringToBoolean(cml.exchangeProperty('defaultChannelRoutePrimary')),
+        "secured": stringToBoolean(cml.exchangeProperty('defaultChannelRouteSecured'))
+      }
+    }
+  ],
+  "endpoints": [
+    {
+      "name": cml.exchangeProperty('endpointName'),
+      "type": cml.exchangeProperty('endpointType'),
+      "secured": stringToBoolean(cml.exchangeProperty('endpointSecured')),
+      "host": cml.exchangeProperty('endpointHost'),
+      "port": cml.exchangeProperty('endpointPort'),
+      "status": cml.exchangeProperty('endpointStatus'),
+      "path": cml.exchangeProperty('endpointPath')
+    }
+  ]
+}

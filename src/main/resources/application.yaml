@@ -1,0 +1,66 @@
+server:
+  port: 9070
+  address: 127.0.0.1
+  error:
+    whitelabel:
+      enabled: false
+  servlet:
+    session:
+      cookie:
+        same-site: strict
+
+camel:
+  springboot:
+    main-run-controller: true
+    routes-include-pattern: "routes/*.camel.yaml"
+    allow-use-original-message: true
+  dataformat:
+    json-jackson:
+      auto-discover-object-mapper: true
+  servlet:
+    mapping:
+      context-path: "/api/*"
+  messageRepository:
+    className: org.hisp.hieboot.camel.impl.JdbcMessageRepository
+    datasourceName: datasource
+
+management:
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include: '*'
+  health:
+    show-details: always
+
+spring:
+  jmx:
+    enabled: true
+  security:
+    user:
+      roles: admin,viewer
+  artemis:
+    mode: EMBEDDED
+    host: localhost
+    port: 61616
+    user: myuser
+    password: mypass
+  datasource:
+    url: jdbc:h2:./message-store;AUTO_SERVER=TRUE;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH
+    username: dhis2rapidpro
+    password: dhis2rapidpro
+    driver-class-name: org.h2.Driver
+  sql:
+    init:
+      platform: h2
+      mode: always
+
+hawtio:
+  authenticationEnabled: false
+
+logging:
+  file:
+    name: my-camel-dhis2-app.log
+
+sql:
+  data-location: classpath:sql.properties

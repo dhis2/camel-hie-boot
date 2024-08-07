@@ -1,0 +1,39 @@
+apiVersion: camel.apache.org/v1
+kind: Kamelet
+metadata:
+  name: hie-replay-checkpoint-sink
+  annotations:
+    camel.apache.org/kamelet.support.level: "Stable"
+    camel.apache.org/provider: "HISP Centre"
+    camel.apache.org/kamelet.group: "HIE Replay"
+    camel.apache.org/kamelet.namespace: "HIE"
+  labels:
+    camel.apache.org/kamelet.type: "sink"
+spec:
+  definition:
+    title: HIE Replay Checkpoint
+    description: |-
+      Records and replays messages.
+    properties:
+      replayChannelName:
+        title: Replay Channel Name
+        type: string
+        default: replay-{{routeId}}
+  template:
+    beans:
+      - name: replayableRoutePolicy
+        type: "#class:org.hisp.hieboot.camel.impl.ReplayableRoutePolicy"
+        properties:
+          replayEndpointUri: "jms:queue:{{replayChannelName}}"
+      - name: checkpointProcessor
+        type: "#class:org.hisp.hieboot.camel.processor.replay.CheckpointProcessor"
+        properties:
+          replayEndpointUri: "jms:queue:{{replayChannelName}}"
+    route:
+      routePolicy: "{{replayableRoutePolicy}}"
+      from:
+        uri: kamelet:source
+        steps:
+          - process:
+              ref: "{{checkpointProcessor}}"
+          - to: kamelet:sink

@@ -1,0 +1,42 @@
+version: '3'
+networks:
+  openhim:
+
+services:
+  mongo-db:
+    image: mongo:4.0
+    networks:
+      - openhim
+    volumes:
+      - "mongo-data:/data/db"
+    restart: unless-stopped
+
+  openhim-core:
+    image: jembi/openhim-core:v8.4.3
+    restart: unless-stopped
+    environment:
+      - mongo_url=mongodb://mongo-db/openhim-development
+      - mongo_atnaUrl=mongodb://mongo-db/openhim-development
+      - NODE_ENV="development"
+      - openhimConsoleBaseUrl="http://localhost:9000"
+    networks:
+      - openhim
+    healthcheck:
+      test: "curl -sSk https://openhim-core:8080/heartbeat || exit 1"
+      interval: 30s
+      timeout: 30s
+      retries: 3
+
+  openhim-console:
+    image: jembi/openhim-console:v1.18.1
+    restart: unless-stopped
+    networks:
+      - openhim
+    healthcheck:
+      test: "curl -sS http://openhim-console || exit 1"
+      interval: 30s
+      timeout: 30s
+      retries: 3
+
+volumes:
+  mongo-data:

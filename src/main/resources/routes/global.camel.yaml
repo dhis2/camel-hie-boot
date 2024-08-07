@@ -1,0 +1,32 @@
+- beans:
+  - name: replayProcessor
+    type: "#class:org.hisp.hieboot.camel.processor.replay.ReplayProcessor"
+  - name: unpackRepoMessageProcessor
+    type: "#class:org.hisp.hieboot.camel.processor.replay.UnpackRepoMessageProcessor"
+
+- routeConfiguration:
+    onCompletion:
+      - onCompletion:
+          mode: BeforeConsumer
+          onFailureOnly: true
+          steps:
+            - process:
+                ref: "#class:org.hisp.hieboot.camel.processor.replay.HieBootOnFailedProcessor"
+      - onCompletion:
+          mode: BeforeConsumer
+          onCompleteOnly: true
+          steps:
+            - process:
+                ref: "#class:org.hisp.hieboot.camel.processor.replay.HieBootOnSuccessProcessor"
+
+- from:
+    uri: "timer://replay"
+    steps:
+      - process:
+          ref: "#replayProcessor"
+      - split:
+          simple: "${body}"
+          steps:
+            - process:
+                ref: "#unpackRepoMessageProcessor"
+            - toD: "${exchangeProperty.replayEndpointUri}"
