@@ -28,6 +28,7 @@ public class ReplayableRoutePolicy extends RoutePolicySupport {
                         @Override
                         public void configure() {
                             from(replayEndpointUri)
+                                    .log("Replaying message [${headers.CamelHieReplayCheckpointMessageId}] in route [${headers.CamelHieReplayCheckpointRouteId}]")
                                     .process(exchange -> exchange.getExchangeExtension().setFromRouteId((String) exchange.getMessage().getHeader(HieExchange.REPLAY_CHECKPOINT_ROUTE_ID)))
                                     .setProperty(HieExchange.REPLAY_CHECKPOINT_MESSAGE_ID, simple(String.format("${headers.%s}", HieExchange.REPLAY_CHECKPOINT_MESSAGE_ID)))
                                     .removeHeader(HieExchange.REPLAY_CHECKPOINT_MESSAGE_ID)

@@ -1,0 +1,78 @@
+version: '3'
+networks:
+  rapidpro:
+
+services:
+  postgres:
+    image: postgis/postgis:12-3.2-alpine
+    environment:
+      - POSTGRES_USER=temba
+      - POSTGRES_PASSWORD=temba
+      - POSTGRES_DB=temba
+    networks:
+      rapidpro:
+        aliases:
+          - db
+
+  redis:
+    image: redis:6.2.6-alpine
+    networks:
+      rapidpro:
+        aliases:
+          - redis
+
+  elasticsearch:
+    image: elasticsearch:6.8.23
+    environment:
+      - discovery.type=single-node
+    networks:
+      rapidpro:
+        aliases:
+          - elasticsearch
+
+  rapidpro:
+    build:
+      context: rapidpro-docker/rapidpro
+      args:
+        RAPIDPRO_REPO: rapidpro/rapidpro
+        RAPIDPRO_VERSION: v7.4.2
+    command: sh -c "sed -i '/CsrfViewMiddleware/s/^/#/g' temba/settings_common.py && /startup.sh"
+    environment:
+      - SECRET_KEY=super-secret-key
+      - DATABASE_URL=postgresql://temba:temba@db/temba
+      - REDIS_URL=redis://redis:6379/0
+      - DJANGO_DEBUG=on
+      - DOMAIN_NAME=localhost
+      - MANAGEPY_COLLECTSTATIC=on
+      - MANAGEPY_INIT_DB=on
+      - MANAGEPY_MIGRATE=on
+      - DJANGO_SUPERUSER_PASSWORD=12345678
+      - MAILROOM_URL=http://mailroom:8090
+      - MAILROOM_AUTH_TOKEN=Gqcqvi2PGkoZMpQi
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+    networks:
+      - rapidpro
+    healthcheck:
+      test: "curl -sSk https://rapidpro:8000 || exit 1"
+      interval: 30s
+      timeout: 30s
+      retries: 3
+
+  mailroom:
+    build:
+      context: rapidpro-docker/mailroom
+      args:
+        MAILROOM_REPO: rapidpro/mailroom
+        MAILROOM_VERSION: 7.4.1
+    command: mailroom --address 0.0.0.0
+    environment:
+      - MAILROOM_DOMAIN=mailroom
+      - MAILROOM_ELASTIC=http://elasticsearch:9200
+      - MAILROOM_ATTACHMENT_DOMAIN=mailroom
+      - MAILROOM_AUTH_TOKEN=Gqcqvi2PGkoZMpQi
+      - MAILROOM_DB=postgres://temba:temba@db/temba?sslmode=disable
+      - MAILROOM_REDIS=redis://redis:6379/0
+    networks:
+      rapidpro:
+        aliases:
+          - mailroom

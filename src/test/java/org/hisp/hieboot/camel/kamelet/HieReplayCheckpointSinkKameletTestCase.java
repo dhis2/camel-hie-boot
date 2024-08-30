@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -30,10 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @CamelSpringBootTest
 @UseAdviceWith
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class HieReplayableSinkKameletTestCase {
-
-    @LocalServerPort
-    private int serverPort;
+public class HieReplayCheckpointSinkKameletTestCase {
 
     @Autowired
     private ProducerTemplate producerTemplate;
@@ -69,9 +65,7 @@ public class HieReplayableSinkKameletTestCase {
 
         camelContext.start();
 
-        producerTemplate.send("direct:routeUnderTest", exchange -> {
-
-        });
+        producerTemplate.send("direct:routeUnderTest", new DefaultExchange(camelContext));
         endpoint.await(5, TimeUnit.SECONDS);
         assertEquals(1, endpoint.getReceivedCounter());
         List<Map<String, Object>> rows = jdbcTemplate.queryForList("SELECT * FROM MESSAGE_STORE");

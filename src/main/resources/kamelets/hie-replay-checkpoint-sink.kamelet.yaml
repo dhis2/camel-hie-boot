@@ -11,7 +11,7 @@ metadata:
     camel.apache.org/kamelet.type: "sink"
 spec:
   definition:
-    title: HIE Replay Checkpoint
+    title: Replay Checkpoint
     description: |-
       Records and replays messages.
     properties:

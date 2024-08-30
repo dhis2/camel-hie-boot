@@ -1,0 +1,4 @@
+{
+  "label": cml.header('label'),
+  "value_type": cml.header('type')
+}

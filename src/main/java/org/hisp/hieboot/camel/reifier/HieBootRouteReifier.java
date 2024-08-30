@@ -23,20 +23,15 @@ public class HieBootRouteReifier extends RouteReifier {
                 definition.getOutputs().add(new HieBootNoOutputDefinition());
             }
         }
-        definition.addInterceptStrategy(new InterceptStrategy() {
-            @Override
-            public Processor wrapProcessorInInterceptors(CamelContext context, NamedNode namedNode, Processor target, Processor nextTarget) throws Exception {
-                if (namedNode instanceof KameletDefinition && ((KameletDefinition) namedNode).getName().equals("hie-replay-checkpoint-sink")) {
-                    return exchange -> {
-                        exchange.setProperty(HieExchange.REPLAY_CHECKPOINT_ROUTE_ID, exchange.getUnitOfWork().getRoute().getRouteId());
-                        exchange.setProperty(HieExchange.REPLAY_CHECKPOINT_MESSAGE_ID, exchange.getUnitOfWork().getOriginalInMessage().getMessageId());
-                        target.process(exchange);
-//                        exchange.removeProperty(HieExchange.REPLAY_CHECKPOINT_ROUTE_ID);
-//                        exchange.removeProperty(HieExchange.REPLAY_CHECKPOINT_MESSAGE_ID);
-                    };
-                } else {
-                    return target;
-                }
+        definition.addInterceptStrategy((context, namedNode, target, nextTarget) -> {
+            if (namedNode instanceof KameletDefinition && ((KameletDefinition) namedNode).getName().equals("hie-replay-checkpoint-sink")) {
+                return exchange -> {
+                    exchange.setProperty(HieExchange.REPLAY_CHECKPOINT_ROUTE_ID, exchange.getUnitOfWork().getRoute().getRouteId());
+                    exchange.setProperty(HieExchange.REPLAY_CHECKPOINT_MESSAGE_ID, exchange.getUnitOfWork().getOriginalInMessage().getMessageId());
+                    target.process(exchange);
+                };
+            } else {
+                return target;
             }
         });
         Route newRoute = super.createRoute();

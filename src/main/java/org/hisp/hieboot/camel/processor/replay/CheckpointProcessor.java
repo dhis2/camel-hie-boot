@@ -4,9 +4,13 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.hisp.hieboot.camel.HieExchange;
 import org.hisp.hieboot.camel.spi.MessageRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class CheckpointProcessor implements Processor {
+
+    protected static final Logger LOGGER = LoggerFactory.getLogger(CheckpointProcessor.class);
 
     @Autowired
     private MessageRepository messageRepository;
@@ -20,6 +24,7 @@ public class CheckpointProcessor implements Processor {
 
         messageRepository.store(String.format("processing:%s:%s:[%s]", messageId, replayableRouteId, replayEndpointUri), exchange.getMessage());
         messageRepository.delete(String.format("replaying:%s:%s:[%s]", messageId, replayableRouteId, replayEndpointUri));
+        LOGGER.info("Created checkpoint for message [{}] in route [{}]", messageId, replayableRouteId);
     }
 
     public MessageRepository getMessageRepository() {
