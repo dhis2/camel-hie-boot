@@ -25,15 +25,20 @@ import java.util.function.Supplier;
 @Configuration
 public class DefaultSecurityConfig {
     @Bean
-    protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        authorizeHttpRequests(request -> request.requestMatchers("/**").permitAll())
-        return http.
-                authorizeHttpRequests(request -> request.requestMatchers("/management/**", "/login", "/logout").authenticated()).
+    protected SecurityFilterChain hawtioFilterChain(HttpSecurity http) throws Exception {
+        return http.securityMatcher("/management/hawtio/**").authorizeHttpRequests(a -> a.anyRequest().authenticated()).
                 formLogin(Customizer.withDefaults()).headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)).
                 csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler())).
                 httpBasic(Customizer.withDefaults()).
                 addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class).
                 build();
+    }
+
+    @Bean
+    protected SecurityFilterChain loginLogoutFilterChain(HttpSecurity http) throws Exception {
+        return http.securityMatcher("/login", "/logout").authorizeHttpRequests(a -> a.anyRequest().authenticated()).
+                formLogin(Customizer.withDefaults()).headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)).
+                httpBasic(Customizer.withDefaults()).build();
     }
 
     static class SpaCsrfTokenRequestHandler extends CsrfTokenRequestAttributeHandler {

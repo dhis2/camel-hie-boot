@@ -1,15 +1,15 @@
 {
     name: cml.header('contactName'),
-    urns: (if cml.header("phoneNumber") != null then ['tel:%s' % cml.header('phoneNumber')] else []) +
-          (if cml.header("telegram") != null then ['telegram:%s' % cml.header('telegram')] else []) +
-          (if cml.header("whatsApp") != null then ['whatsapp:%s' % cml.header('whatsApp')] else []) +
-          (if cml.header("facebook") != null then ['facebook:%s' % cml.header('facebook')] else []) +
-          (if cml.header("wechat") != null then ['wechat:%s' % cml.header('wechat')] else []) +
-          (if cml.header("jiochat") != null then ['jiochat:%s' % cml.header('jiochat')] else []) +
-          (if cml.header("external") != null then ['external:%s' % cml.header('external')] else []) +
-          (if cml.header("viber") != null then ['viber:%s' % cml.header('viber')] else []) +
-          (if cml.header("line") != null then ['line:%s' % cml.header('line')] else []) +
-          (if cml.header("twitterId") != null then ['twitterid:%s' % cml.header('twitterId')] else []),
-    groups: (if cml.header("groups") != null then cml.header("groups") else []),
-    fields: (if cml.header("fields") != null then cml.header("fields") else {})
+    urns: (if cml.header('phoneNumber') != null then ['tel:%s' % cml.header('phoneNumber')] else []) +
+          (if cml.header('telegram') != null then ['telegram:%s' % cml.header('telegram')] else []) +
+          (if cml.header('whatsApp') != null then ['whatsapp:%s' % cml.header('whatsApp')] else []) +
+          (if cml.header('facebook') != null then ['facebook:%s' % cml.header('facebook')] else []) +
+          (if cml.header('weChat') != null then ['wechat:%s' % cml.header('weChat')] else []) +
+          (if cml.header('jioChat') != null then ['jiochat:%s' % cml.header('jioChat')] else []) +
+          (if cml.header('external') != null then ['ext:%s' % cml.header('external')] else []) +
+          (if cml.header('viber') != null then ['viber:%s' % cml.header('viber')] else []) +
+          (if cml.header('line') != null then ['line:%s' % cml.header('line')] else []) +
+          (if cml.header('twitterId') != null then ['twitterid:%s' % cml.header('twitterId')] else []),
+    [if cml.header('groups') != null then 'groups']: cml.header('groups'),
+    [if cml.header('fields') != null then 'fields']: cml.header('fields')
 }

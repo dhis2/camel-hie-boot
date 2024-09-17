@@ -3,26 +3,27 @@ package org.hisp.hieboot.camel.kamelet.rapidpro;
 import org.apache.camel.CamelContext;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.mock.MockEndpoint;
+import org.apache.camel.spring.SpringCamelContext;
 import org.apache.camel.support.DefaultExchange;
 import org.apache.camel.test.spring.junit5.CamelSpringBootTest;
 import org.apache.camel.test.spring.junit5.UseAdviceWith;
 import org.hisp.hieboot.CamelHieBootApp;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.oneOf;
+import java.util.concurrent.TimeUnit;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = CamelHieBootApp.class)
 @CamelSpringBootTest
 @UseAdviceWith
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-public class HieCreateFieldRapidProSinkKameletTestCase extends AbstractHieRapidProKameletTestCase {
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+public class HieGetFlowRunsRapidProSinkKameletTestCase extends AbstractHieRapidProKameletTestCase {
 
     @Autowired
     private CamelContext camelContext;
@@ -30,21 +31,31 @@ public class HieCreateFieldRapidProSinkKameletTestCase extends AbstractHieRapidP
     @Autowired
     private ProducerTemplate producerTemplate;
 
+    @BeforeEach
+    public void beforeEach() {
+        SpringCamelContext.setNoStart(false);
+    }
+
     @Test
-    public void test() throws Exception {
+    public void testHieGetFlowsRapidProSink() throws Exception {
         camelContext.addRoutes(new RouteBuilder() {
             @Override
             public void configure() {
                 from("direct:routeUnderTest")
-                        .setHeader("label", constant("foo"))
-                        .setHeader("type", constant("text"))
-                        .to(String.format("kamelet:hie-create-field-rapidpro-sink?rapidProApiUrl=%s&rapidProApiToken=%s", RAPIDPRO_API_URL, RAPIDPRO_API_TOKEN));
+                        .to(String.format("kamelet:hie-get-flow-runs-rapidpro-sink?rapidProApiUrl=%s&rapidProApiToken=%s", RAPIDPRO_API_URL, RAPIDPRO_API_TOKEN))
+                        .split(body())
+                        .to("mock:verify");
             }
         });
 
+        MockEndpoint endpoint = camelContext.getEndpoint("mock:verify", MockEndpoint.class);
+        endpoint.setExpectedMessageCount(2);
+
         camelContext.start();
+
         producerTemplate.send("direct:routeUnderTest", new DefaultExchange(camelContext));
-        given(RAPIDPRO_API_REQUEST_SPEC).get("/fields.json").then()
-                .body( "results.size()", equalTo( 2 ) ).body("results[0].key", is(oneOf("bar", "foo")));
+
+        endpoint.await(5, TimeUnit.SECONDS);
+        assertEquals(0, endpoint.getReceivedCounter());
     }
 }

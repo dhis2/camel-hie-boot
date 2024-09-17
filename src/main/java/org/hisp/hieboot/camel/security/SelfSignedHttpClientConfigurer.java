@@ -27,7 +27,6 @@ public class SelfSignedHttpClientConfigurer implements HttpClientConfigurer {
                             .register("https",
                                     new org.apache.hc.client5.http.ssl.SSLConnectionSocketFactory(sslContext, NoopHostnameVerifier.INSTANCE))
                             .build()));
-
         } catch (KeyManagementException | NoSuchAlgorithmException | KeyStoreException e) {
             throw new RuntimeException(e);
         }

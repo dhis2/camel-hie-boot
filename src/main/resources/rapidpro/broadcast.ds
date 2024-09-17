@@ -1,0 +1,6 @@
+{
+  [if cml.header('urns') != null then 'urns']: cml.header('urns'),
+  [if cml.header('contacts') != null then 'contacts']: cml.header('contacts'),
+  [if cml.header('groups') != null then 'groups']: cml.header('groups'),
+  text: cml.header('text')
+}

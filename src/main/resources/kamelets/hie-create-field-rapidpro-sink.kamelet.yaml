@@ -25,6 +25,9 @@ spec:
       rapidProApiToken:
         title: RapidPro API Token
         type: string
+        format: password
+        x-descriptors:
+          - urn:camel:group:credentials
   dataTypes:
     in:
       headers:
@@ -36,29 +39,33 @@ spec:
           type: string
           enum: ["text", "number", "datetime", "state", "district", "ward"]
   template:
+    beans:
+      - name: setRapidProHeadersProcessor
+        type: "#class:org.hisp.hieboot.camel.processor.rapidpro.SetRapidProHeadersProcessor"
+        properties:
+          rapidProApiToken: "{{rapidProApiToken}}"
+      - name: removeRapidProHeadersProcessor
+        type: "#class:org.hisp.hieboot.camel.processor.rapidpro.RemoveRapidProHeadersProcessor"
     route:
       from:
         uri: kamelet:source
         steps:
+          - process:
+              ref: "{{setRapidProHeadersProcessor}}"
           - transform:
               datasonnet:
+                source: null
                 expression: resource:classpath:rapidpro/field.ds
                 resultType: java.lang.String
                 bodyMediaType: application/x-java-object
                 outputMediaType: application/json
-          - setHeader:
-              name: Content-Type
-              expression:
-                constant: application/json
-          - setHeader:
-              name: Authorization
-              expression:
-                constant: "Token {{rapidProApiToken}}"
           - to:
               uri: "{{rapidProApiUrl}}/fields.json"
               parameters:
                 httpMethod: POST
                 okStatusCodeRange: 200-299
+          - process:
+              ref: "{{removeRapidProHeadersProcessor}}"
           - choice:
               when:
                 - simple: "${header.CamelHttpResponseCode} == 201"

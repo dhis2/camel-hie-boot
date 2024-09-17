@@ -8,12 +8,12 @@ import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.support.DefaultExchange;
 import org.apache.camel.test.spring.junit5.CamelSpringBootTest;
 import org.apache.camel.test.spring.junit5.UseAdviceWith;
+import org.hisp.hieboot.CamelHieBootApp;
 import org.hisp.hieboot.camel.spi.MessageRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.DirtiesContext;
 
@@ -25,11 +25,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = CamelHieBootApp.class)
 @CamelSpringBootTest
 @UseAdviceWith
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class HieReplayCheckpointSinkKameletTestCase {
+public class HieReplayCheckpointActionKameletTestCase {
 
     @Autowired
     private ProducerTemplate producerTemplate;
@@ -55,7 +55,7 @@ public class HieReplayCheckpointSinkKameletTestCase {
             public void configure() {
                 from("direct:routeUnderTest")
                         .routeId("routeUnderTest")
-                        .kamelet("hie-replay-checkpoint-sink")
+                        .kamelet("hie-replay-checkpoint-action")
                         .to("mock:verify");
             }
         });
@@ -79,7 +79,7 @@ public class HieReplayCheckpointSinkKameletTestCase {
             public void configure() {
                 from("direct:routeUnderTest")
                         .routeId("routeUnderTest")
-                        .kamelet("hie-replay-checkpoint-sink")
+                        .kamelet("hie-replay-checkpoint-action")
                         .to("mock:verify")
                         .throwException(new Exception());
             }
@@ -109,7 +109,7 @@ public class HieReplayCheckpointSinkKameletTestCase {
             public void configure() {
                 from("direct:routeUnderTest")
                         .routeId("routeUnderTest")
-                        .kamelet("hie-replay-checkpoint-sink?replayChannelName=routeUnderTest")
+                        .kamelet("hie-replay-checkpoint-action?replayChannelName=routeUnderTest")
                         .to("mock:verify");
             }
         });

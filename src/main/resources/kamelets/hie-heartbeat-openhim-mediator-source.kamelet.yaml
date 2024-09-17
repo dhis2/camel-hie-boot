@@ -52,14 +52,14 @@ spec:
               groovy: "camelContext.getUptime().get(java.time.temporal.ChronoUnit.SECONDS)"
         - transform:
             datasonnet:
+              source: null
               expression: resource:classpath:openhim/heartbeat.ds
               resultType: java.lang.String
               bodyMediaType: application/x-java-object
               outputMediaType: application/json
         - setHeader:
             name: Content-Type
-            expression:
-              constant: "application/json"
+            constant: "application/json"
         - to:
             uri: "{{openHimUrl}}/mediators/{{mediatorUrn}}/heartbeat"
             parameters:

@@ -1,14 +1,14 @@
 apiVersion: camel.apache.org/v1
 kind: Kamelet
 metadata:
-  name: hie-replay-checkpoint-sink
+  name: hie-replay-checkpoint-action
   annotations:
     camel.apache.org/kamelet.support.level: "Stable"
     camel.apache.org/provider: "HISP Centre"
     camel.apache.org/kamelet.group: "HIE Replay"
     camel.apache.org/kamelet.namespace: "HIE"
   labels:
-    camel.apache.org/kamelet.type: "sink"
+    camel.apache.org/kamelet.type: "action"
 spec:
   definition:
     title: Replay Checkpoint

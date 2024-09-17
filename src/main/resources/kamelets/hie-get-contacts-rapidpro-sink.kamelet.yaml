@@ -25,6 +25,9 @@ spec:
       rapidProApiToken:
         title: RapidPro API Token
         type: string
+        format: password
+        x-descriptors:
+          - urn:camel:group:credentials
   dataTypes:
     in:
       headers:
@@ -38,9 +41,9 @@ spec:
           type: array
           items:
             type: string
-        groups:
+        group:
           title: Groups
-          description: The UUIDs of any groups the contact is part of.
+          description: The group name or UUID of any groups the contact is part of.
           type: array
           items:
             type: string
@@ -61,10 +64,16 @@ spec:
           default: "{{rapidProApiUrl}}"
   template:
     beans:
+      - name: setRapidProHeadersProcessor
+        type: "#class:org.hisp.hieboot.camel.processor.rapidpro.SetRapidProHeadersProcessor"
+        properties:
+          rapidProApiToken: "{{rapidProApiToken}}"
+      - name: removeRapidProHeadersProcessor
+        type: "#class:org.hisp.hieboot.camel.processor.rapidpro.RemoveRapidProHeadersProcessor"
       - name: setCamelHttpQueryFromHeadersProcessor
         type: "#class:org.hisp.hieboot.camel.processor.SetCamelHttpQueryFromHeadersProcessor"
         properties:
-          headerNames: uuid,urn,groups,beforeModifiedOn,afterModifiedOn
+          headerNames: uuid,urn,group,beforeModifiedOn,afterModifiedOn
       - name: pageExpressionIterator
         type: "#class:org.hisp.hieboot.camel.expression.PageExpressionIterator"
     route:
@@ -77,23 +86,18 @@ spec:
                   steps:
                   - setHeader:
                       name: nextPageUrl
-                      expression:
-                        constant: "{{rapidProApiUrl}}/contacts.json"
+                      constant: "{{rapidProApiUrl}}/contacts.json"
+          - process:
+              ref: "{{setRapidProHeadersProcessor}}"
           - process:
               ref: "{{setCamelHttpQueryFromHeadersProcessor}}"
-          - setHeader:
-              name: Content-Type
-              expression:
-                constant: application/json
-          - setHeader:
-              name: Authorization
-              expression:
-                constant: "Token {{rapidProApiToken}}"
           - toD:
               uri: ${headers.nextPageUrl}
               parameters:
                 okStatusCodeRange: 200-299
                 httpMethod: GET
+          - process:
+              ref: "{{removeRapidProHeadersProcessor}}"
           - choice:
               when:
                 - simple: "${header.CamelHttpResponseCode} == 200"
@@ -103,4 +107,6 @@ spec:
                     - transform:
                         expression:
                           ref: "{{pageExpressionIterator}}"
+          - removeHeader:
+              name: nextPageUrl
           - to: kamelet:sink

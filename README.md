@@ -7,7 +7,7 @@ Bootstrap your Java integration with Camel HIE by extending the app main class f
 ```java
 package org.example;
 
-import org.hisp.hieboot.camel.CamelHieBootApp;
+import org.hisp.hieboot.CamelHieBootApp;
 import org.springframework.boot.SpringApplication;
 
 public class Main extends CamelHieBootApp {

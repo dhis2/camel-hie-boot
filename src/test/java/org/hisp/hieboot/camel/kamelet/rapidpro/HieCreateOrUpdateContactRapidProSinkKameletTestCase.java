@@ -6,16 +6,17 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.support.DefaultExchange;
 import org.apache.camel.test.spring.junit5.CamelSpringBootTest;
 import org.apache.camel.test.spring.junit5.UseAdviceWith;
+import org.hisp.hieboot.CamelHieBootApp;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = CamelHieBootApp.class)
 @CamelSpringBootTest
 @UseAdviceWith
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-public class HieAddContactRapidProSinkKameletTestCase extends AbstractHieRapidProKameletTestCase {
+public class HieCreateOrUpdateContactRapidProSinkKameletTestCase extends AbstractHieRapidProKameletTestCase {
 
     @Autowired
     private CamelContext camelContext;
@@ -31,7 +32,7 @@ public class HieAddContactRapidProSinkKameletTestCase extends AbstractHieRapidPr
                 from("direct:routeUnderTest")
                         .setHeader("contactName", constant("Alice"))
                         .setHeader("phoneNumber", constant("0035621000000"))
-                        .to(String.format("kamelet:hie-add-contact-rapidpro-sink?rapidProApiUrl=%s&rapidProApiToken=%s", RAPIDPRO_API_URL, RAPIDPRO_API_TOKEN))
+                        .to(String.format("kamelet:hie-create-or-update-contact-rapidpro-sink?rapidProApiUrl=%s&rapidProApiToken=%s", RAPIDPRO_API_URL, RAPIDPRO_API_TOKEN))
                         .to("mock:verify");
             }
         });

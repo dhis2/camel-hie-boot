@@ -6,7 +6,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-public class CamelHieBootApp extends SpringBootServletInitializer {
+public abstract class CamelHieBootApp extends SpringBootServletInitializer {
 
     @Bean
     public SelfSignedHttpClientConfigurer selfSignedHttpClientConfigurer() {

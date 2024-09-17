@@ -132,14 +132,14 @@ spec:
             ref: "{{routePropsToExchangePropsProcessor}}"
         - transform:
             datasonnet:
+              source: null
               expression: resource:classpath:openhim/mediator-config.ds
               resultType: java.lang.String
               bodyMediaType: application/x-java-object
               outputMediaType: application/json
         - setHeader:
             name: Content-Type
-            expression:
-              constant: "application/json"
+            constant: "application/json"
         - log: "Registering [{{mediatorUrn}}] mediator with OpenHIM..."
         - to:
             uri: "{{openHimUrl}}/mediators"

@@ -24,7 +24,7 @@ public class HieBootRouteReifier extends RouteReifier {
             }
         }
         definition.addInterceptStrategy((context, namedNode, target, nextTarget) -> {
-            if (namedNode instanceof KameletDefinition && ((KameletDefinition) namedNode).getName().equals("hie-replay-checkpoint-sink")) {
+            if (namedNode instanceof KameletDefinition && ((KameletDefinition) namedNode).getName().equals("hie-replay-checkpoint-action")) {
                 return exchange -> {
                     exchange.setProperty(HieExchange.REPLAY_CHECKPOINT_ROUTE_ID, exchange.getUnitOfWork().getRoute().getRouteId());
                     exchange.setProperty(HieExchange.REPLAY_CHECKPOINT_MESSAGE_ID, exchange.getUnitOfWork().getOriginalInMessage().getMessageId());
