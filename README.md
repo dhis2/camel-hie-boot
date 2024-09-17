@@ -2,7 +2,7 @@
 
 [Apache Camel](https://camel.apache.org/) tailored for HIE.
 
-Bootstrap your Java integration with Camel HIE by extending the app main class from `org.hisp.hieboot.camel.CamelHieBootApp` like so:
+Bootstrap your Java integration with Camel HIE by extending the app main class from `org.hisp.hieboot.CamelHieBootApp` like so:
 
 ```java
 package org.example;
