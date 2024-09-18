@@ -19,14 +19,13 @@ import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = CamelHieBootApp.class)
 @CamelSpringBootTest
 @UseAdviceWith
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-public class HieHeartbeatOpenHimMediatorSourceKameletTestCase {
+public class HieOpenHimMediatorRegistrationSourceKameletTestCase {
 
     @Autowired
     private CamelContext camelContext;
@@ -54,10 +53,7 @@ public class HieHeartbeatOpenHimMediatorSourceKameletTestCase {
         camelContext.addRoutes(new RouteBuilder() {
             @Override
             public void configure() {
-                from(String.format("kamelet:hie-register-openhim-mediator-source?openHimUrl=https://localhost:%s&openHimUsername=root@openhim.org&openHimPassword=openhim-password&httpClientConfigurer=#selfSignedHttpClientConfigurer",
-                        openHimCoreApiPortNo));
-
-                from(String.format("kamelet:hie-heartbeat-openhim-mediator-source?openHimUrl=https://localhost:%s&openHimUsername=root@openhim.org&openHimPassword=openhim-password&httpClientConfigurer=#selfSignedHttpClientConfigurer",
+                from(String.format("kamelet:hie-openhim-mediator-register-source?openHimUrl=https://localhost:%s&openHimUsername=root@openhim.org&openHimPassword=openhim-password&httpClientConfigurer=#selfSignedHttpClientConfigurer",
                         openHimCoreApiPortNo)).to("mock:verify");
             }
         });
@@ -67,8 +63,8 @@ public class HieHeartbeatOpenHimMediatorSourceKameletTestCase {
 
         camelContext.start();
 
-        endpoint.await(15, TimeUnit.SECONDS);
+        endpoint.await(5, TimeUnit.SECONDS);
         assertEquals(1, endpoint.getReceivedCounter());
-        given(openHimCoreRequestSpec).get("/mediators/urn:mediator:camel-hie-mediator").then().body("_uptime", notNullValue());
+        given(openHimCoreRequestSpec).get("/mediators/urn:mediator:camel-hie-mediator").then().statusCode(200);
     }
 }

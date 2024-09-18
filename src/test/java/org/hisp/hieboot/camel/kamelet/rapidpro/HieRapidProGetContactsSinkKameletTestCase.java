@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @CamelSpringBootTest
 @UseAdviceWith
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class HieGetContactsRapidProSinkKameletTestCase extends AbstractHieRapidProKameletTestCase {
+public class HieRapidProGetContactsSinkKameletTestCase extends AbstractHieRapidProKameletTestCase {
 
     @Autowired
     private CamelContext camelContext;
@@ -46,7 +46,7 @@ public class HieGetContactsRapidProSinkKameletTestCase extends AbstractHieRapidP
             @Override
             public void configure() {
                 from("direct:routeUnderTest")
-                        .to(String.format("kamelet:hie-get-contacts-rapidpro-sink?rapidProApiUrl=%s&rapidProApiToken=%s", "mock:rapidpro", RAPIDPRO_API_TOKEN))
+                        .to(String.format("kamelet:hie-rapidpro-get-contacts-sink?rapidProApiUrl=%s&rapidProApiToken=%s", "mock:rapidpro", RAPIDPRO_API_TOKEN))
                         .split(body())
                             .to("mock:verify");
             }
@@ -87,7 +87,7 @@ public class HieGetContactsRapidProSinkKameletTestCase extends AbstractHieRapidP
             @Override
             public void configure() {
                 from("direct:routeUnderTest")
-                        .to(String.format("kamelet:hie-get-contacts-rapidpro-sink?rapidProApiUrl=%s&rapidProApiToken=%s", RAPIDPRO_API_URL, RAPIDPRO_API_TOKEN))
+                        .to(String.format("kamelet:hie-rapidpro-get-contacts-sink?rapidProApiUrl=%s&rapidProApiToken=%s", RAPIDPRO_API_URL, RAPIDPRO_API_TOKEN))
                         .split(body())
                             .to("mock:verify");
             }
@@ -111,7 +111,7 @@ public class HieGetContactsRapidProSinkKameletTestCase extends AbstractHieRapidP
             public void configure() {
                 from("direct:routeUnderTest")
                         .setHeader("urn", constant("tel:+250788123123"))
-                        .to(String.format("kamelet:hie-get-contacts-rapidpro-sink?rapidProApiUrl=%s&rapidProApiToken=%s", RAPIDPRO_API_URL, RAPIDPRO_API_TOKEN))
+                        .to(String.format("kamelet:hie-rapidpro-get-contacts-sink?rapidProApiUrl=%s&rapidProApiToken=%s", RAPIDPRO_API_URL, RAPIDPRO_API_TOKEN))
                         .split(body())
                             .to("mock:verify");
             }

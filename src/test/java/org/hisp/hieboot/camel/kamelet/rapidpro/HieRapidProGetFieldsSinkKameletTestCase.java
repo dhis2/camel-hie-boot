@@ -2,7 +2,6 @@ package org.hisp.hieboot.camel.kamelet.rapidpro;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.camel.CamelContext;
-import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
@@ -14,7 +13,6 @@ import org.apache.camel.test.spring.junit5.UseAdviceWith;
 import org.hisp.hieboot.CamelHieBootApp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
@@ -29,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @CamelSpringBootTest
 @UseAdviceWith
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class HieGetFieldsRapidProSinkKameletTestCase extends AbstractHieRapidProKameletTestCase {
+public class HieRapidProGetFieldsSinkKameletTestCase extends AbstractHieRapidProKameletTestCase {
 
     @Autowired
     private CamelContext camelContext;
@@ -48,7 +46,7 @@ public class HieGetFieldsRapidProSinkKameletTestCase extends AbstractHieRapidPro
             @Override
             public void configure() {
                 from("direct:routeUnderTest")
-                        .to(String.format("kamelet:hie-get-fields-rapidpro-sink?rapidProApiUrl=%s&rapidProApiToken=%s", "mock:rapidpro", RAPIDPRO_API_TOKEN))
+                        .to(String.format("kamelet:hie-rapidpro-get-fields-sink?rapidProApiUrl=%s&rapidProApiToken=%s", "mock:rapidpro", RAPIDPRO_API_TOKEN))
                         .split(body())
                         .to("mock:verify");
             }
@@ -93,7 +91,7 @@ public class HieGetFieldsRapidProSinkKameletTestCase extends AbstractHieRapidPro
             @Override
             public void configure() {
                 from("direct:routeUnderTest")
-                        .to(String.format("kamelet:hie-get-fields-rapidpro-sink?rapidProApiUrl=%s&rapidProApiToken=%s", RAPIDPRO_API_URL, RAPIDPRO_API_TOKEN))
+                        .to(String.format("kamelet:hie-rapidpro-get-fields-sink?rapidProApiUrl=%s&rapidProApiToken=%s", RAPIDPRO_API_URL, RAPIDPRO_API_TOKEN))
                         .split(body())
                         .to("mock:verify");
             }
@@ -117,7 +115,7 @@ public class HieGetFieldsRapidProSinkKameletTestCase extends AbstractHieRapidPro
             public void configure() {
                 from("direct:routeUnderTest")
                         .setHeader("key", constant("foo"))
-                        .to(String.format("kamelet:hie-get-fields-rapidpro-sink?rapidProApiUrl=%s&rapidProApiToken=%s", RAPIDPRO_API_URL, RAPIDPRO_API_TOKEN))
+                        .to(String.format("kamelet:hie-rapidpro-get-fields-sink?rapidProApiUrl=%s&rapidProApiToken=%s", RAPIDPRO_API_URL, RAPIDPRO_API_TOKEN))
                         .split(body())
                         .to("mock:verify");
             }

@@ -16,7 +16,7 @@ import org.springframework.test.annotation.DirtiesContext;
 @CamelSpringBootTest
 @UseAdviceWith
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-public class HieCreateOrUpdateContactRapidProSinkKameletTestCase extends AbstractHieRapidProKameletTestCase {
+public class HieRapidProCreateOrUpdateContactSinkKameletTestCase extends AbstractHieRapidProKameletTestCase {
 
     @Autowired
     private CamelContext camelContext;
@@ -32,7 +32,7 @@ public class HieCreateOrUpdateContactRapidProSinkKameletTestCase extends Abstrac
                 from("direct:routeUnderTest")
                         .setHeader("contactName", constant("Alice"))
                         .setHeader("phoneNumber", constant("0035621000000"))
-                        .to(String.format("kamelet:hie-create-or-update-contact-rapidpro-sink?rapidProApiUrl=%s&rapidProApiToken=%s", RAPIDPRO_API_URL, RAPIDPRO_API_TOKEN))
+                        .to(String.format("kamelet:hie-rapidpro-create-or-update-contact-sink?rapidProApiUrl=%s&rapidProApiToken=%s", RAPIDPRO_API_URL, RAPIDPRO_API_TOKEN))
                         .to("mock:verify");
             }
         });

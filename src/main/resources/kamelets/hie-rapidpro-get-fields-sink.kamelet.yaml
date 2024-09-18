@@ -1,7 +1,7 @@
 apiVersion: camel.apache.org/v1
 kind: Kamelet
 metadata:
-  name: hie-create-group-rapidpro-sink
+  name: hie-rapidpro-get-fields-sink
   annotations:
     camel.apache.org/kamelet.support.level: "Stable"
     camel.apache.org/kamelet.icon: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMTM2IiB3aWR0aD0iNDgxIiB2aWV3Qm94PSIwIDAgMTM1LjE0MDc3IDQ4NC4wNTgyMSI+PHBhdGggZD0iTS03MzQuNDMgNDEwLjA1OGgtNTR2LTQwN2gyNTR2MjA3aC0yMDB2MjAwem0xMDMtOTdoOTd2OTdoLTk3di05N3ptOTctMjV2LTU0aC0xNzZ2MTc2aDU0di0xMjJoMTIyem0xOTQgMjloLTcxdjkzaC0xMnYtMjI1aDc1cTE3IDAgMjkuNSA0dDIwLjUgMTJxOCA3IDEyLjUgMTkuNXQ0LjUgMjkuNXEwIDEzLTIuNSAyNHQtOC41IDE5cS01IDktMTQgMTQuNXQtMjIgNy41bDUxIDk1aC0xM2wtNTAtOTN6bS04LTEyMWgtNjN2MTEwaDYzcTE2IDAgMjYuNS00dDE2LjUtMTFxNi04IDguNS0xOC41dDIuNS0yMi41cTAtMTQtMy0yNHQtMTAtMTdxLTctNi0xNy05LjV0LTI0LTMuNXptMjQxIDE5M3ExIDcgOC41IDEwdDE1LjUgM3YxMHEtNiAwLTEwLjUtLjV0LTkuNS0xLjVxLTQtMi03LjUtNC41dC01LjUtNS41bC0xOS41IDYuNS00Ny41IDYuNXEtOSAwLTE2LjUtM3QtMTIuNS05cS02LTYtOC41LTE0LjV0LTIuNS0yMC41cTAtMTAgMi41LTE4dDcuNS0xNHE1LTYgMTMuNS05LjV0MjAuNS00LjVsNjEtN3YtMTZxMC0xMS0yLjUtMTguNXQtNi41LTExLjVxLTUtNS0xMS41LTd0LTE1LjUtMnEtMTcgMC0zOC41IDIuNWwtMjEuNSAyLjUtMS0xMSAyMS0yLjUgNDAtMi41cTEyIDAgMjEgM3QxNSA5cTYgNyA4LjUgMTZ0Mi41IDIydjkyem0tNzEtNTlxLTkgMS0xNS41IDR0LTEwLjUgN3EtNCA1LTUuNSAxMS41dC0xLjUgMTMuNXEwIDkgMiAxNS41dDUgMTEuNXE0IDUgOS41IDcuNXQxMi41IDIuNXEyNCAwIDQ0LTYuNWwyMC02LjV2LTY2bC02MCA2em0xNDctODBoMTF2MTNsMTctOCAzOS04cTE0IDAgMjYuNSA1dDIxLjUgMTVxOSAxMCAxNCAyNXQ1IDM1cTAgMjMtNS41IDM5dC0xNi41IDI2cS0xMCAxMS0yNSAxNnQtMzMgNXEtMTMgMC0yNS0ybC0xOC0zdjc2aC0xMXYtMjM0em0xMSAyNHYxMjRxNSAxIDE3LjUgM3QyNS41IDJxMTUgMCAyNy41LTQuNXQyMS41LTEzLjVxOS05IDE0LTIzLjV0NS0zNC41cTAtMjAtNS0zM3QtMTItMjFxLTgtOS0xOC0xMi41dC0yMC0zLjVxLTIxIDAtMzguNSA4LjVsLTE3LjUgOC41em0xOTQtNjdoMTF2MTJoLTExdi0xMnptMCA0M2gxMXYxNjBoLTExdi0xNjB6bTIwOSAxNjBoLTExdi0xNGwtMTYuNSA4LjUtMzguNSA4LjVxLTggMC0xOS0ydC0yMi05cS0xMS04LTE4LjUtMjQuNXQtNy41LTQ1LjVxMC0yMSA1LTM3dDE1LTI2cTEwLTExIDI1LTE2LjV0MzUtNS41cTExIDAgMjMuNSAxLjV0MTguNSAyLjV2LTY2aDExdjIyNXptLTExLTI0di0xMjVxLTYtMS0xOS41LTIuNXQtMjIuNS0xLjVxLTE3IDAtMzAgNXQtMjEgMTVxLTkgOS0xMyAyMy41dC00IDMyLjVxMCAyNCA2IDM4dDE0IDIxcTkgNyAxOC41IDl0MTYuNSAycTIwIDAgMzcuNS04LjVsMTcuNS04LjV6bTEyMC0zOXY2M2gtNDR2LTIyMWg3NHExOSAwIDMzLjUgNC41dDI0LjUgMTQuNXE5IDEwIDE0IDI0LjV0NSAzMy41cTAgMTktNSAzNHQtMTQgMjZxLTEwIDEwLTI0LjUgMTUuNXQtMzMuNSA1LjVoLTMwem0yOS00M3E5IDAgMTUtMi41dDEwLTcuNXE0LTUgNi0xMnQyLTE2cTAtOS0yLTE1LjV0LTYtMTAuNXEtNC01LTEwLTd0LTE1LTJoLTI5djczaDI5em0xNjUtMzloLTF2LTE1aC00M3YxNjBoNDN2LTEwNGwxMi01IDMzLTl2LTQxcS0xNiAzLTI5IDh0LTE1IDZ6bTE1NC0xOXEtMTcgMC0zMi41IDYuNXQtMjYuNSAxOC41cS0xMSAxMS0xOCAyNi41dC03IDMyLjVxMCAxNyA3IDMyLjV0MTggMjYuNXExMSAxMiAyNi41IDE4LjV0MzIuNSA2LjVxMTggMCAzMy02LjV0MjctMTguNXExMS0xMSAxNy41LTI2LjV0Ni41LTMyLjVxMC0xNy02LjUtMzIuNXQtMTcuNS0yNi41cS0xMi0xMi0yNy0xOC41dC0zMy02LjV6bTAgMTI2cS05IDAtMTYuNS0zdC0xMy41LTlxLTYtNi05LTEzLjV0LTMtMTYuNXEwLTkgMy0xN3Q5LTEzcTYtNiAxMy41LTkuNXQxNi41LTMuNXE5IDAgMTYuNSAzLjV0MTMuNSA5LjVxNiA1IDkuNSAxM3QzLjUgMTdxMCA5LTMuNSAxNi41dC05LjUgMTMuNXEtNiA2LTEzLjUgOXQtMTYuNSAzeiIgZmlsbD0iIzA2OSIvPjwvc3ZnPg=="
@@ -12,9 +12,9 @@ metadata:
     camel.apache.org/kamelet.type: "sink"
 spec:
   definition:
-    title: Create RapidPro Group
+    title: RapidPro Get Fields Sink
     description: |-
-      Create a contact group on RapidPro.
+      Get fields from RapidPro.
     required:
       - rapidProApiUrl
       - rapidProApiToken
@@ -31,9 +31,15 @@ spec:
   dataTypes:
     in:
       headers:
-        name:
-          title: Name
+        key:
+          title: Key
+          description: The unique key of this field, filterable as key.
           type: string
+        nextPageUrl:
+          title: Next Page URL
+          description: Next page URL.
+          type: string
+          default: "{{rapidProApiUrl}}"
   template:
     beans:
       - name: setRapidProHeadersProcessor
@@ -42,31 +48,43 @@ spec:
           rapidProApiToken: "{{rapidProApiToken}}"
       - name: removeRapidProHeadersProcessor
         type: "#class:org.hisp.hieboot.camel.processor.rapidpro.RemoveRapidProHeadersProcessor"
+      - name: setCamelHttpQueryFromHeadersProcessor
+        type: "#class:org.hisp.hieboot.camel.processor.SetCamelHttpQueryFromHeadersProcessor"
+        properties:
+          headerNames: key,name,type
+      - name: pageExpressionIterator
+        type: "#class:org.hisp.hieboot.camel.expression.PageExpressionIterator"
     route:
       from:
         uri: kamelet:source
         steps:
-          - process:
-              ref: "{{setRapidProHeadersProcessor}}"
-          - transform:
-              datasonnet:
-                source: null
-                expression: resource:classpath:rapidpro/group.ds
-                resultType: java.lang.String
-                bodyMediaType: application/x-java-object
-                outputMediaType: application/json
-          - to:
-              uri: "{{rapidProApiUrl}}/groups.json"
-              parameters:
-                httpMethod: POST
-                okStatusCodeRange: 200-299
-          - process:
-              ref: "{{removeRapidProHeadersProcessor}}"
           - choice:
               when:
-                - simple: "${header.CamelHttpResponseCode} == 201"
+                - simple: ${header.nextPageUrl} == null
+                  steps:
+                  - setHeader:
+                      name: nextPageUrl
+                      constant: "{{rapidProApiUrl}}/fields.json"
+          - process:
+              ref: "{{setRapidProHeadersProcessor}}"
+          - process:
+              ref: "{{setCamelHttpQueryFromHeadersProcessor}}"
+          - toD:
+              uri: ${headers.nextPageUrl}
+              parameters:
+                okStatusCodeRange: 200-299
+                httpMethod: GET
+          - choice:
+              when:
+                - simple: "${header.CamelHttpResponseCode} == 200"
                   steps:
                     - unmarshal:
                         json: {}
-                    - log: "Created RapidPro group [${body['uuid']}]"
+                    - transform:
+                        expression:
+                          ref: "{{pageExpressionIterator}}"
+          - process:
+              ref: "{{removeRapidProHeadersProcessor}}"
+          - removeHeader:
+              name: nextPageUrl
           - to: kamelet:sink

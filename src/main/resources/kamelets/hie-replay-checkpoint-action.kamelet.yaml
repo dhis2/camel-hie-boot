@@ -11,7 +11,7 @@ metadata:
     camel.apache.org/kamelet.type: "action"
 spec:
   definition:
-    title: Replay Checkpoint
+    title: Replay Checkpoint Action
     description: |-
       Records and replays messages.
     properties:

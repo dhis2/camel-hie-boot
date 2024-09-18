@@ -3,7 +3,6 @@ package org.hisp.hieboot.camel.kamelet.rapidpro;
 import org.apache.camel.CamelContext;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.spring.SpringCamelContext;
 import org.apache.camel.support.DefaultExchange;
 import org.apache.camel.test.spring.junit5.CamelSpringBootTest;
@@ -15,15 +14,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 
-import java.util.concurrent.TimeUnit;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = CamelHieBootApp.class)
 @CamelSpringBootTest
 @UseAdviceWith
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class HieGetGroupsRunsRapidProSinkKameletTestCase extends AbstractHieRapidProKameletTestCase {
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+public class HieRapidProCreateGroupSinkKameletTestCase extends AbstractHieRapidProKameletTestCase {
 
     @Autowired
     private CamelContext camelContext;
@@ -37,25 +36,19 @@ public class HieGetGroupsRunsRapidProSinkKameletTestCase extends AbstractHieRapi
     }
 
     @Test
-    public void testHieGetGroupsRapidProSink() throws Exception {
+    public void test() throws Exception {
         camelContext.addRoutes(new RouteBuilder() {
             @Override
             public void configure() {
                 from("direct:routeUnderTest")
-                        .to(String.format("kamelet:hie-get-groups-rapidpro-sink?rapidProApiUrl=%s&rapidProApiToken=%s", RAPIDPRO_API_URL, RAPIDPRO_API_TOKEN))
-                        .split(body())
-                        .to("mock:verify");
+                        .setHeader("name", constant("foo"))
+                        .to(String.format("kamelet:hie-rapidpro-create-group-sink?rapidProApiUrl=%s&rapidProApiToken=%s", RAPIDPRO_API_URL, RAPIDPRO_API_TOKEN));
             }
         });
 
-        MockEndpoint endpoint = camelContext.getEndpoint("mock:verify", MockEndpoint.class);
-        endpoint.setExpectedMessageCount(2);
-
         camelContext.start();
-
         producerTemplate.send("direct:routeUnderTest", new DefaultExchange(camelContext));
-
-        endpoint.await(5, TimeUnit.SECONDS);
-        assertEquals(3, endpoint.getReceivedCounter());
+        given(RAPIDPRO_API_REQUEST_SPEC).queryParam("name", "foo").get("/groups.json").then()
+                .body("results.size()", equalTo(1)).body("results[0].name", equalTo("foo"));
     }
 }

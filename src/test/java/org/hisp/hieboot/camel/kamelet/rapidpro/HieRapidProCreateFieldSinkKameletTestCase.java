@@ -8,7 +8,6 @@ import org.apache.camel.test.spring.junit5.CamelSpringBootTest;
 import org.apache.camel.test.spring.junit5.UseAdviceWith;
 import org.hisp.hieboot.CamelHieBootApp;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
@@ -22,7 +21,7 @@ import static org.hamcrest.Matchers.oneOf;
 @CamelSpringBootTest
 @UseAdviceWith
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-public class HieCreateFieldRapidProSinkKameletTestCase extends AbstractHieRapidProKameletTestCase {
+public class HieRapidProCreateFieldSinkKameletTestCase extends AbstractHieRapidProKameletTestCase {
 
     @Autowired
     private CamelContext camelContext;
@@ -38,7 +37,7 @@ public class HieCreateFieldRapidProSinkKameletTestCase extends AbstractHieRapidP
                 from("direct:routeUnderTest")
                         .setHeader("label", constant("foo"))
                         .setHeader("type", constant("text"))
-                        .to(String.format("kamelet:hie-create-field-rapidpro-sink?rapidProApiUrl=%s&rapidProApiToken=%s", RAPIDPRO_API_URL, RAPIDPRO_API_TOKEN));
+                        .to(String.format("kamelet:hie-rapidpro-create-field-sink?rapidProApiUrl=%s&rapidProApiToken=%s", RAPIDPRO_API_URL, RAPIDPRO_API_TOKEN));
             }
         });
 

@@ -15,8 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -25,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @CamelSpringBootTest
 @UseAdviceWith
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class HieSendBroadcastRapidProSinkKameletTestCase extends AbstractHieRapidProKameletTestCase {
+public class HieRapidProGetGroupsRunsSinkKameletTestCase extends AbstractHieRapidProKameletTestCase {
 
     @Autowired
     private CamelContext camelContext;
@@ -39,29 +37,25 @@ public class HieSendBroadcastRapidProSinkKameletTestCase extends AbstractHieRapi
     }
 
     @Test
-    public void test() throws Exception {
+    public void testHieGetGroupsRapidProSink() throws Exception {
         camelContext.addRoutes(new RouteBuilder() {
             @Override
             public void configure() {
                 from("direct:routeUnderTest")
-                        .setHeader("urns", constant(List.of("tel:+250788123123", "tel:+250788123124")))
-                        .setHeader("text", constant("Hello World!"))
-                        .to(String.format("kamelet:hie-send-broadcast-rapidpro-sink?rapidProApiUrl=%s&rapidProApiToken=%s", RAPIDPRO_API_URL, RAPIDPRO_API_TOKEN))
+                        .to(String.format("kamelet:hie-rapidpro-get-groups-sink?rapidProApiUrl=%s&rapidProApiToken=%s", RAPIDPRO_API_URL, RAPIDPRO_API_TOKEN))
+                        .split(body())
                         .to("mock:verify");
             }
         });
 
-        MockEndpoint verifyEndpoint = camelContext.getEndpoint("mock:verify", MockEndpoint.class);
-        verifyEndpoint.setExpectedMessageCount(1);
+        MockEndpoint endpoint = camelContext.getEndpoint("mock:verify", MockEndpoint.class);
+        endpoint.setExpectedMessageCount(2);
+
         camelContext.start();
 
         producerTemplate.send("direct:routeUnderTest", new DefaultExchange(camelContext));
 
-        verifyEndpoint.await(5, TimeUnit.SECONDS);
-
-        Map body = verifyEndpoint.getReceivedExchanges().get(0).getMessage().getBody(Map.class);
-        assertEquals("Hello World!", ((Map) body.get("text")).get("eng"));
-        assertEquals("queued", body.get("status"));
+        endpoint.await(5, TimeUnit.SECONDS);
+        assertEquals(3, endpoint.getReceivedCounter());
     }
-
 }
