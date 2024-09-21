@@ -7,7 +7,7 @@ const main = async () => {
     const kameletDirPath = 'src/main/resources/kamelets';
     const kamelets = fs.readdirSync(kameletDirPath).map(
         fileName => {
-            yaml.parse(fs.readFileSync(kameletDirPath + '/' + fileName, 'utf8'));
+            return yaml.parse(fs.readFileSync(kameletDirPath + '/' + fileName, 'utf8'));
         }
     );
     const catalogTemplate = handlebars.compile(fs.readFileSync('kamelet-catalog.md.handlebars', 'utf8'));
