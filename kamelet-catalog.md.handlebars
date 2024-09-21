@@ -1,0 +1,14 @@
+# Camel HIE Boot Kamelet Catalog
+
+{{#.}}
+## {{spec.definition.title}}
+
+### Configuration Options
+
+| Property                        | Name | Description | Type | Default | Example |
+| ------------------------------- | ---- | ----------- | ---- | ------- | ------- |
+{{#each spec.definition.properties}}
+| {{@key}} | {{title}}   | {{description}}          | {{type}} | {{default}}    | {{example}}     |
+{{/each}}
+
+{{/.}}
