@@ -24,7 +24,5 @@ buildNumber.properties
 
 .idea/
 
-kamelet-catalog.md
-
 node_modules/
 package-lock.json
