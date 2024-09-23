@@ -3,12 +3,12 @@ kind: Kamelet
 metadata:
   name: hie-replay-checkpoint-action
   annotations:
-    camel.apache.org/kamelet.support.level: "Stable"
-    camel.apache.org/provider: "HISP Centre"
-    camel.apache.org/kamelet.group: "HIE Replay"
-    camel.apache.org/kamelet.namespace: "HIE"
+    camel.apache.org/kamelet.support.level: Stable
+    camel.apache.org/provider: HISP Centre
+    camel.apache.org/kamelet.group: HIE Replay
+    camel.apache.org/kamelet.namespace: HIE
   labels:
-    camel.apache.org/kamelet.type: "action"
+    camel.apache.org/kamelet.type: action
 spec:
   definition:
     title: Replay Checkpoint Action

@@ -1,14 +1,38 @@
 # Camel HIE Boot Kamelet Catalog
 
 {{#.}}
+* [{{spec.definition.title}}](#{{noSpaces spec.definition.title}})
+{{/.}}
+
+{{#.}}
 ## {{spec.definition.title}}
 
-### Configuration Options
+**Provided by: {{lookup metadata.annotations "camel.apache.org/provider"}}**
 
-| Property                        | Name | Description | Type | Default | Example |
-| ------------------------------- | ---- | ----------- | ---- | ------- | ------- |
+**Support Level for this Kamelet is: {{lookup metadata.annotations "camel.apache.org/kamelet.support.level"}}**
+
+{{spec.definition.description}}
+
+### Configuration Properties
+
+The following table summarises the configuration properties available for the `{{metadata.name}}` Kamelet:
+
+| Property | Name      | Description     | Required     | Type     | Default     | Example     |
+|----------|-----------|-----------------|--------------|----------|-------------|-------------|
 {{#each spec.definition.properties}}
-| {{@key}} | {{title}}   | {{description}}          | {{type}} | {{default}}    | {{example}}     |
+| {{@key}} | {{title}} | {{{description}}} | {{required}} | {{type}} | {{default}} | {{example}} |
 {{/each}}
+
+{{#if spec.dataTypes.in.headers}}
+### Configuration Input Headers
+
+The following table summarises the input headers available for the `{{metadata.name}}` Kamelet:
+
+| Header   | Name           | Description            | Required     |  Type            |Default            | Example            |
+|----------|----------------|------------------------|--------------|-----------------|--------------------|--------------------|
+{{#each spec.dataTypes.in.headers}}
+| {{@key}} | {{this.title}} | {{@value.description}} | {{required}} | {{@value.type}} | {{@value.default}} | {{@value.example}} |
+{{/each}}
+{{/if}}
 
 {{/.}}
