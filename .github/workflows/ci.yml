@@ -33,3 +33,4 @@ jobs:
         with:
           commit_message: 'docs: generate Kamelet catalog [skip ci]'
           push_options: --force
+          file_pattern: 'kamelet-catalog.md'
