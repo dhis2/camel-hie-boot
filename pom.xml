@@ -13,7 +13,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <camel.version>4.7.0</camel.version>
         <hawtio.version>4.0.0</hawtio.version>
-        <spring.boot-version>3.2.4</spring.boot-version>
+        <spring.boot-version>3.3.4</spring.boot-version>
         <testcontainers.version>1.19.7</testcontainers.version>
     </properties>
 
