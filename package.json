@@ -1,0 +1,16 @@
+{
+  "name": "kamelet-catalog-auto-doc",
+  "version": "1.0.0",
+  "main": "kamelet-catalog-auto-doc.js",
+  "scripts": {
+    "generate": "npm install && node kamelet-catalog-auto-doc.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "handlebars": "^4.7.8",
+    "prettier": "^3.3.3",
+    "run": "^1.5.0",
+    "yaml": "^2.5.1"
+  }
+}
