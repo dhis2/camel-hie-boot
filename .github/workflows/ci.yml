@@ -41,6 +41,6 @@ jobs:
         with:
           commit_message: 'docs: generate Kamelet catalog [skip ci]'
           file_pattern: 'kamelet-catalog.md'
-          commit_author: "${{ steps.import-gpg.outputs.name }} <${{ steps.import-gpg.outputs.email }}>"
-          commit_user_name: ${{ steps.import-gpg.outputs.name }}
+          commit_author: "Auto-Doc Bot"
+          commit_user_name: auto-doc-bot
           commit_user_email: ${{ steps.import-gpg.outputs.email }}
