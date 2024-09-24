@@ -47,7 +47,7 @@ spec:
           Reference to custom `org.apache.camel.component.http.HttpClientConfigurer` that configures the `HttpClient` to be used. This property should be set to `#selfSignedHttpClientConfigurer` for an OpenHIM server presenting a self-signed TLS/SSL certificate.
         example: "#selfSignedHttpClientConfigurer"
       mediatorUrn:
-        title: Mediator URN
+        title: Mediator URn
         type: string
         description: Unique identifier to identify the mediator.
         default: urn:mediator:camel-hie-mediator
