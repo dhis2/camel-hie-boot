@@ -24,6 +24,14 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build]
     steps:
+      - name: "Import GPG key"
+        id: import-gpg
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.AUTODOC_BOT_GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.AUTODOC_BOT_GPG_PASSPHRASE }}
+          git_user_signingkey: true
+          git_commit_gpgsign: true
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
@@ -33,3 +41,6 @@ jobs:
         with:
           commit_message: 'docs: generate Kamelet catalog [skip ci]'
           file_pattern: 'kamelet-catalog.md'
+          commit_author: "${{ steps.import-gpg.outputs.name }} <${{ steps.import-gpg.outputs.email }}>"
+          commit_user_name: ${{ steps.import-gpg.outputs.name }}
+          commit_user_email: ${{ steps.import-gpg.outputs.email }}
