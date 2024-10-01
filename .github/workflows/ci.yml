@@ -19,6 +19,16 @@ jobs:
           distribution: 'adopt'
           cache: maven
       - run: mvn -B package
+      - name: Publish
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          OSSRH_USERNAME: ${{ secrets.SONATYPE_OSSRH_USERNAME }}
+          OSSRH_PASSWORD: ${{ secrets.SONATYPE_OSSRH_PASSWORD }}
+          GPG_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
+          GPG_SECRET_KEYS: ${{ secrets.PGP_PRIVATE_KEY }}
+        run: |
+          echo -e "$GPG_SECRET_KEYS" | gpg --import --no-tty --batch --yes
+          mvn deploy --settings .mvn/settings.xml -Dgpg.skip=false -Dmaven.test.skip=true -B
   generate_kamelet_catalog:
     if: github.repository == 'dhis2/camel-hie-boot' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
