@@ -63,4 +63,4 @@ logging:
     name: my-camel-dhis2-app.log
 
 sql:
-  data-location: classpath:sql.properties
+  message-store: classpath:/hie-message-store-sql.properties

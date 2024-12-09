@@ -27,6 +27,6 @@ public class DefaultRepositoryMessage implements RepositoryMessage {
 
     @Override
     public String getContext() {
-        return "";
+        return context;
     }
 }

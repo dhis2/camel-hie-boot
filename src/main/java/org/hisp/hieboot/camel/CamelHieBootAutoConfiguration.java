@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 @Configuration(proxyBeanMethods = false)
-@PropertySource( "${sql.data-location}" )
+@PropertySource( "${sql.message-store}" )
 public class CamelHieBootAutoConfiguration  {
 
     @Bean
