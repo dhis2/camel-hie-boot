@@ -1,5 +1,7 @@
 # Camel HIE Boot Kamelet Catalog
 
+- [Replay Checkpoint Action](#replay-checkpoint-action)
+- [Fail Replay Checkpoint Action](#fail-replay-checkpoint-action)
 - [OpenHIM Mediator Heartbeat Source](#openhim-mediator-heartbeat-source)
 - [OpenHIM Mediator Register Source](#openhim-mediator-register-source)
 - [RapidPro Create Field Sink](#rapidpro-create-field-sink)
@@ -10,7 +12,46 @@
 - [RapidPro Get Flow Runs Sink](#rapidpro-get-flow-runs-sink)
 - [RapidPro Get Groups Sink](#rapidpro-get-groups-sink)
 - [RapidPro Send Broadcast Sink](#rapidpro-send-broadcast-sink)
-- [Replay Checkpoint Action](#replay-checkpoint-action)
+
+## Replay Checkpoint Action
+
+**Provided by: HISP Centre**
+
+**Support Level for this Kamelet is: Stable**
+
+Records and replays messages.
+
+### Configuration Properties
+
+The following table summarises the configuration properties available for the `hie-create-replay-checkpoint-action` Kamelet:
+
+| Property          | Name                | Description | Required | Type   | Default            | Example |
+| ----------------- | ------------------- | ----------- | -------- | ------ | ------------------ | ------- |
+| replayChannelName | Replay Channel Name |             | false    | string | replay-{{routeId}} |         |
+
+## Fail Replay Checkpoint Action
+
+**Provided by: HISP Centre**
+
+**Support Level for this Kamelet is: Stable**
+
+Marks replay checkpoint as failed.
+
+### Configuration Properties
+
+The following table summarises the configuration properties available for the `hie-fail-replay-checkpoint-action` Kamelet:
+
+| Property          | Name                | Description | Required | Type   | Default            | Example |
+| ----------------- | ------------------- | ----------- | -------- | ------ | ------------------ | ------- |
+| replayChannelName | Replay Channel Name |             | false    | string | replay-{{routeId}} |         |
+
+### Configuration Input Headers
+
+The following table summarises the input headers available for the `hie-fail-replay-checkpoint-action` Kamelet:
+
+| Header       | Name          | Description | Required | Type | Default | Example |
+| ------------ | ------------- | ----------- | -------- | ---- | ------- | ------- |
+| errorMessage | Error Message |             | false    |      |         |         |
 
 ## OpenHIM Mediator Heartbeat Source
 
@@ -300,19 +341,3 @@ The following table summarises the input headers available for the `hie-rapidpro
 | groups        | Contacts                     |             | false    |      |         |         |
 | text          | Text                         |             | true     |      |         |         |
 | base_language | Default Translation Language |             | false    |      |         |         |
-
-## Replay Checkpoint Action
-
-**Provided by: HISP Centre**
-
-**Support Level for this Kamelet is: Stable**
-
-Records and replays messages.
-
-### Configuration Properties
-
-The following table summarises the configuration properties available for the `hie-replay-checkpoint-action` Kamelet:
-
-| Property          | Name                | Description | Required | Type   | Default            | Example |
-| ----------------- | ------------------- | ----------- | -------- | ------ | ------------------ | ------- |
-| replayChannelName | Replay Channel Name |             | false    | string | replay-{{routeId}} |         |
