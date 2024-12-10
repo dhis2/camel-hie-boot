@@ -24,7 +24,7 @@ public class CheckpointProcessor implements Processor {
 
         messageRepository.store(String.format("processing:%s:%s:[%s]", messageId, replayableRouteId, replayEndpointUri), exchange.getMessage());
         messageRepository.delete(String.format("replaying:%s:%s:[%s]", messageId, replayableRouteId, replayEndpointUri));
-        LOGGER.info("Created checkpoint for message [{}] in route [{}]", messageId, replayableRouteId);
+        LOGGER.info("Created replay checkpoint for message [{}] in route [{}]", messageId, replayableRouteId);
     }
 
     public MessageRepository getMessageRepository() {

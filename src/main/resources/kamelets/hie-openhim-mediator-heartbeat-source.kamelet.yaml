@@ -53,7 +53,11 @@ spec:
         default: urn:mediator:camel-hie-mediator
   template:
     from:
-      uri: timer://heartbeatOpenHimMediator?delay=10000&fixedRate=true&period=5000
+      uri: timer://heartbeatOpenHimMediator
+      parameters:
+        delay: 10000
+        fixedRate: true
+        period: 5000
       steps:
         - setProperty:
             name: uptime

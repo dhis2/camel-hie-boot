@@ -19,14 +19,17 @@
             - process:
                 ref: "#class:org.hisp.hieboot.camel.processor.replay.HieBootOnSuccessProcessor"
 
-- from:
-    uri: "timer://replay"
-    steps:
-      - process:
-          ref: "#replayProcessor"
-      - split:
-          simple: "${body}"
-          steps:
-            - process:
-                ref: "#unpackRepoMessageProcessor"
-            - toD: "${exchangeProperty.replayEndpointUri}"
+- route:
+    id: Schedule Replay Route
+    from:
+      uri: "timer://replay"
+      steps:
+        - process:
+            ref: "#replayProcessor"
+        - split:
+            simple: "${body}"
+            steps:
+              - process:
+                  ref: "#unpackRepoMessageProcessor"
+              - log: "Scheduling replay of message ${headers.CamelHieReplayCheckpointMessageId}..."
+              - toD: "${exchangeProperty.replayEndpointUri}"

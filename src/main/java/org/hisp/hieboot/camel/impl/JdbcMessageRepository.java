@@ -32,9 +32,6 @@ public class JdbcMessageRepository extends ServiceSupport implements MessageRepo
     @Autowired
     private CamelContext camelContext;
 
-//    @Autowired
-//    private ObjectMapper objectMapper;
-
     private String dataSourceName;
 
     public JdbcMessageRepository(String dataSourceName) {

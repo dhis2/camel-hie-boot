@@ -1,4 +1,4 @@
-package org.hisp.hieboot.camel.kamelet;
+package org.hisp.hieboot.camel.kamelet.replay;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @CamelSpringBootTest
 @UseAdviceWith
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class HieReplayCheckpointActionKameletTestCase {
+public class HieCreateReplayCheckpointActionKameletTestCase {
 
     @Autowired
     private ProducerTemplate producerTemplate;
@@ -55,7 +55,7 @@ public class HieReplayCheckpointActionKameletTestCase {
             public void configure() {
                 from("direct:routeUnderTest")
                         .routeId("routeUnderTest")
-                        .kamelet("hie-replay-checkpoint-action")
+                        .kamelet("hie-create-replay-checkpoint-action")
                         .to("mock:verify");
             }
         });
@@ -79,7 +79,7 @@ public class HieReplayCheckpointActionKameletTestCase {
             public void configure() {
                 from("direct:routeUnderTest")
                         .routeId("routeUnderTest")
-                        .kamelet("hie-replay-checkpoint-action")
+                        .kamelet("hie-create-replay-checkpoint-action")
                         .to("mock:verify")
                         .throwException(new Exception());
             }
@@ -109,7 +109,7 @@ public class HieReplayCheckpointActionKameletTestCase {
             public void configure() {
                 from("direct:routeUnderTest")
                         .routeId("routeUnderTest")
-                        .kamelet("hie-replay-checkpoint-action?replayChannelName=routeUnderTest")
+                        .kamelet("hie-create-replay-checkpoint-action?replayChannelName=routeUnderTest")
                         .to("mock:verify");
             }
         });

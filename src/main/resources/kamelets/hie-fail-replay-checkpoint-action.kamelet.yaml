@@ -1,7 +1,7 @@
 apiVersion: camel.apache.org/v1
 kind: Kamelet
 metadata:
-  name: hie-replay-checkpoint-action
+  name: hie-fail-replay-checkpoint-action
   annotations:
     camel.apache.org/kamelet.support.level: Stable
     camel.apache.org/provider: HISP Centre
@@ -11,29 +11,28 @@ metadata:
     camel.apache.org/kamelet.type: action
 spec:
   definition:
-    title: Replay Checkpoint Action
+    title: Fail Replay Checkpoint Action
     description: |-
-      Records and replays messages.
+      Marks replay checkpoint as failed.
     properties:
       replayChannelName:
         title: Replay Channel Name
         type: string
         default: replay-{{routeId}}
+  dataTypes:
+    in:
+      headers:
+        errorMessage:
+          title: Error Message
+          type: string
   template:
     beans:
-      - name: replayableRoutePolicy
-        type: "#class:org.hisp.hieboot.camel.impl.ReplayableRoutePolicy"
-        properties:
-          replayEndpointUri: "jms:queue:{{replayChannelName}}"
-      - name: checkpointProcessor
-        type: "#class:org.hisp.hieboot.camel.processor.replay.CheckpointProcessor"
-        properties:
-          replayEndpointUri: "jms:queue:{{replayChannelName}}"
+      - name: failCheckpointProcessor
+        type: "#class:org.hisp.hieboot.camel.processor.replay.FailCheckpointProcessor"
     route:
-      routePolicy: "{{replayableRoutePolicy}}"
       from:
         uri: kamelet:source
         steps:
           - process:
-              ref: "{{checkpointProcessor}}"
+              ref: "{{failCheckpointProcessor}}"
           - to: kamelet:sink
