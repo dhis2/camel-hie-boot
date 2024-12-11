@@ -11,9 +11,11 @@ import org.apache.camel.support.DefaultExchange;
 import org.apache.camel.support.DefaultMessage;
 import org.apache.camel.support.MessageHelper;
 import org.apache.camel.support.service.ServiceSupport;
+import org.hisp.hieboot.camel.RuntimeCamelHieBootException;
 import org.hisp.hieboot.camel.spi.MessageRepository;
 import org.hisp.hieboot.camel.spi.RepositoryMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,9 +34,26 @@ public class JdbcMessageRepository extends ServiceSupport implements MessageRepo
     @Autowired
     private CamelContext camelContext;
 
+    @Value("${camel.messageRepository.datasourceName}")
     private String dataSourceName;
 
-    public JdbcMessageRepository(String dataSourceName) {
+    public ProducerTemplate getProducerTemplate() {
+        return producerTemplate;
+    }
+
+    public void setProducerTemplate(ProducerTemplate producerTemplate) {
+        this.producerTemplate = producerTemplate;
+    }
+
+    public CamelContext getCamelContext() {
+        return camelContext;
+    }
+
+    public void setCamelContext(CamelContext camelContext) {
+        this.camelContext = camelContext;
+    }
+
+    public void setDataSourceName(String dataSourceName) {
         this.dataSourceName = dataSourceName;
     }
 
@@ -102,12 +121,22 @@ public class JdbcMessageRepository extends ServiceSupport implements MessageRepo
             Message message = new DefaultMessage(camelContext);
             message.setBody(row.get("body"));
 
-            byte[] headersAsBytes = (byte[]) row.get("headers");
+            Object headers = row.get("headers");
             Map<String, Object> headersAsMap;
-            try {
-                headersAsMap = OBJECT_MAPPER.readValue(headersAsBytes, Map.class);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            if (headers instanceof byte[]) {
+                try {
+                    headersAsMap = OBJECT_MAPPER.readValue( (byte[]) headers, Map.class);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            } else if (headers instanceof String)  {
+                try {
+                    headersAsMap = OBJECT_MAPPER.readValue((String) headers, Map.class);
+                } catch (IOException e) {
+                    throw new RuntimeCamelHieBootException(e);
+                }
+            } else {
+                throw new RuntimeCamelHieBootException(String.format("Unsupported data type when attempting to unmarshal Camel message headers from database: [%s]. Hint: are you sure you are using a supported database?", headers.getClass().getName()));
             }
 
             message.setHeaders(headersAsMap);
@@ -148,4 +177,5 @@ public class JdbcMessageRepository extends ServiceSupport implements MessageRepo
         }
         return toRepositoryMessages(replyJdbcExchange.getMessage().getBody(List.class));
     }
+
 }
