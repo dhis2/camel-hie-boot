@@ -18,12 +18,9 @@ abstract class MessageRepositoryConfiguration {
             matchIfMissing = true)
     static class Jdbc {
 
-        @Value("${camel.messageRepository.datasourceName}")
-        private String datasourceName;
-
         @Bean
         public MessageRepository jdbcMessageRepository() {
-            return new JdbcMessageRepository(datasourceName);
+            return new JdbcMessageRepository();
         }
     }
 
