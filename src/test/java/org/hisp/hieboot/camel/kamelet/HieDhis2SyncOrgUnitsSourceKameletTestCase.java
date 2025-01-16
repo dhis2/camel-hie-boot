@@ -52,9 +52,6 @@ public class HieDhis2SyncOrgUnitsSourceKameletTestCase {
     public void beforeEach() {
         dbPortNo = dhis2DockerComposeContainer.getServicePort("db", 5432);
         dhis2Client = Dhis2ClientBuilder.newClient(String.format("http://%s:%s/api", dhis2DockerComposeContainer.getServiceHost("dhis2", 8080), dhis2DockerComposeContainer.getServicePort("dhis2", 8080)), "admin", "district")
-                .withCallTimeout( 500000L, TimeUnit.MILLISECONDS )
-                .withWriteTimeout(500000L, TimeUnit.MILLISECONDS)
-                .withReadTimeout(500000L, TimeUnit.MILLISECONDS)
                 .build();
     }
 

@@ -22,7 +22,6 @@ spec:
       - dhis2DatabaseUser
       - dhis2DatabasePassword
       - sourceDhis2ApiUrl
-      -
     properties:
       dhis2DatabaseHostname:
         title: DHIS2 Database Hostname
